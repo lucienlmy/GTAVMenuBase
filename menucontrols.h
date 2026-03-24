@@ -28,10 +28,15 @@ namespace NativeMenu {
         bool IsKeyDownFor(ControlType control, unsigned long long millis);
         void Update();
         bool IsControlDownFor(eControl control, unsigned long long millis);
+        void AddNativeControl(eControl control);
+        bool IsNativeJustPressedForType(ControlType control);
+        bool IsNativeJustReleasedForType(ControlType control);
+        bool IsNativeControlDownForType(ControlType control, unsigned long long millis);
         static const int controlSize = SIZEOF_ControlType;
         int ControlKeys[controlSize];
         int ControllerButton1 = -1;
         int ControllerButton2 = -1;
+        int NativeControlActions[controlSize];
     private:
 
         bool controlCurr[controlSize];

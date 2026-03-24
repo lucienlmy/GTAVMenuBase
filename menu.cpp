@@ -722,23 +722,23 @@ void Menu::CheckKeys() {
     optionpress = false;
 
     if (GetTickCount64() - delay > menuTime ||
-        controls.IsKeyJustPressed(MenuControls::MenuKey) ||
-        controls.IsKeyJustPressed(MenuControls::MenuSelect) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneSelect) ||
-        controls.IsKeyJustPressed(MenuControls::MenuCancel) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneCancel) ||
-        controls.IsKeyJustPressed(MenuControls::MenuUp) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlFrontendUp) ||
-        controls.IsKeyJustPressed(MenuControls::MenuDown) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlFrontendDown) ||
-        controls.IsKeyJustPressed(MenuControls::MenuLeft) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneLeft) ||
-        controls.IsKeyJustPressed(MenuControls::MenuRight) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneRight)) {
+        controls.IsKeyJustPressed(MenuControls::MenuKey) || controls.IsNativeJustPressedForType(MenuControls::MenuKey) ||
+        controls.IsKeyJustPressed(MenuControls::MenuSelect) || controls.IsNativeJustPressedForType(MenuControls::MenuSelect) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneSelect) ||
+        controls.IsKeyJustPressed(MenuControls::MenuCancel) || controls.IsNativeJustPressedForType(MenuControls::MenuCancel) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneCancel) ||
+        controls.IsKeyJustPressed(MenuControls::MenuUp) || controls.IsNativeJustPressedForType(MenuControls::MenuUp) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlFrontendUp) ||
+        controls.IsKeyJustPressed(MenuControls::MenuDown) || controls.IsNativeJustPressedForType(MenuControls::MenuDown) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlFrontendDown) ||
+        controls.IsKeyJustPressed(MenuControls::MenuLeft) || controls.IsNativeJustPressedForType(MenuControls::MenuLeft) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneLeft) ||
+        controls.IsKeyJustPressed(MenuControls::MenuRight) || controls.IsNativeJustPressedForType(MenuControls::MenuRight) || useNative && PAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, ControlPhoneRight)) {
         processMenuNav();
     }
 
-    if (controls.IsKeyJustReleased(MenuControls::MenuKey) || controls.IsKeyJustPressed(MenuControls::MenuKey) ||
-        controls.IsKeyJustReleased(MenuControls::MenuSelect) || controls.IsKeyJustPressed(MenuControls::MenuSelect) ||
-        controls.IsKeyJustReleased(MenuControls::MenuCancel) || controls.IsKeyJustPressed(MenuControls::MenuCancel) ||
-        controls.IsKeyJustReleased(MenuControls::MenuUp) || controls.IsKeyJustPressed(MenuControls::MenuUp) ||
-        controls.IsKeyJustReleased(MenuControls::MenuDown) || controls.IsKeyJustPressed(MenuControls::MenuDown) ||
-        controls.IsKeyJustReleased(MenuControls::MenuLeft) || controls.IsKeyJustPressed(MenuControls::MenuLeft) ||
-        controls.IsKeyJustReleased(MenuControls::MenuRight) || controls.IsKeyJustPressed(MenuControls::MenuRight) ||
+    if (controls.IsKeyJustReleased(MenuControls::MenuKey) || controls.IsKeyJustPressed(MenuControls::MenuKey) || controls.IsNativeJustReleasedForType(MenuControls::MenuKey) ||
+        controls.IsKeyJustReleased(MenuControls::MenuSelect) || controls.IsKeyJustPressed(MenuControls::MenuSelect) || controls.IsNativeJustReleasedForType(MenuControls::MenuSelect) ||
+        controls.IsKeyJustReleased(MenuControls::MenuCancel) || controls.IsKeyJustPressed(MenuControls::MenuCancel) || controls.IsNativeJustReleasedForType(MenuControls::MenuCancel) ||
+        controls.IsKeyJustReleased(MenuControls::MenuUp) || controls.IsKeyJustPressed(MenuControls::MenuUp) || controls.IsNativeJustReleasedForType(MenuControls::MenuUp) ||
+        controls.IsKeyJustReleased(MenuControls::MenuDown) || controls.IsKeyJustPressed(MenuControls::MenuDown) || controls.IsNativeJustReleasedForType(MenuControls::MenuDown) ||
+        controls.IsKeyJustReleased(MenuControls::MenuLeft) || controls.IsKeyJustPressed(MenuControls::MenuLeft) || controls.IsNativeJustReleasedForType(MenuControls::MenuLeft) ||
+        controls.IsKeyJustReleased(MenuControls::MenuRight) || controls.IsKeyJustPressed(MenuControls::MenuRight) || controls.IsNativeJustReleasedForType(MenuControls::MenuRight) ||
         PAD::IS_DISABLED_CONTROL_PRESSED(0, ControlPhoneSelect) || PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, ControlPhoneSelect) ||
         PAD::IS_DISABLED_CONTROL_PRESSED(0, ControlPhoneCancel) || PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, ControlPhoneCancel) ||
         PAD::IS_DISABLED_CONTROL_PRESSED(0, ControlFrontendUp) || PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, ControlFrontendUp) ||
@@ -749,10 +749,10 @@ void Menu::CheckKeys() {
     }
 
     for (unsigned i = 1; i < menuTimeDelays.size(); ++i) {
-        if (controls.IsKeyDownFor(MenuControls::MenuUp, (i+1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendUp, (i + 1) * menuTimeRepeat) ||
-            controls.IsKeyDownFor(MenuControls::MenuDown, (i + 1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendDown, (i + 1) * menuTimeRepeat) ||
-            controls.IsKeyDownFor(MenuControls::MenuLeft, (i + 1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendLeft, (i + 1) * menuTimeRepeat) ||
-            controls.IsKeyDownFor(MenuControls::MenuRight, (i + 1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendRight, (i + 1) * menuTimeRepeat)) {
+        if (controls.IsKeyDownFor(MenuControls::MenuUp, (i+1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendUp, (i + 1) * menuTimeRepeat) || controls.IsNativeControlDownForType(MenuControls::MenuUp, (i+1) * menuTimeRepeat) ||
+            controls.IsKeyDownFor(MenuControls::MenuDown, (i + 1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendDown, (i + 1) * menuTimeRepeat) || controls.IsNativeControlDownForType(MenuControls::MenuDown, (i+1) * menuTimeRepeat) ||
+            controls.IsKeyDownFor(MenuControls::MenuLeft, (i + 1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendLeft, (i + 1) * menuTimeRepeat) || controls.IsNativeControlDownForType(MenuControls::MenuLeft, (i+1) * menuTimeRepeat) ||
+            controls.IsKeyDownFor(MenuControls::MenuRight, (i + 1) * menuTimeRepeat) || controls.IsControlDownFor(ControlFrontendRight, (i + 1) * menuTimeRepeat) || controls.IsNativeControlDownForType(MenuControls::MenuRight, (i+1) * menuTimeRepeat)) {
             menuTime = menuTimeDelays[i]; 
         }
     }
@@ -1204,7 +1204,7 @@ void Menu::hideHUDComponents() {
     HUD::HIDE_HELP_TEXT_THIS_FRAME();
     HUD::HIDE_HUD_COMPONENT_THIS_FRAME(HudComponentVehicleName);
     HUD::HIDE_HUD_COMPONENT_THIS_FRAME(HudComponentAreaName);
-    HUD::HIDE_HUD_COMPONENT_THIS_FRAME(HudComponentUnused);
+    HUD::HIDE_HUD_COMPONENT_THIS_FRAME(HudComponentVehicleClass);
     HUD::HIDE_HUD_COMPONENT_THIS_FRAME(HudComponentStreetName);
     HUD::HIDE_HUD_COMPONENT_THIS_FRAME(HudComponentHelpText);
 }
@@ -1236,9 +1236,24 @@ void Menu::processMenuNav() {
         useNative = false;
     }
 
-    if (controls.IsKeyJustReleased(MenuControls::MenuKey) || useNative &&
-        NMPAD::IS_DISABLED_CONTROL_PRESSED(0, controls.ControllerButton1) &&
-        NMPAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, controls.ControllerButton2)) {
+    // Menu toggle: if both a keyboard MenuKey and a native MenuKey_Action are configured,
+    // require the combination (both pressed) to open the menu. If MenuKey_Action == -1,
+    // fall back to single-key behavior.
+    int nativeMenuKeyAction = controls.NativeControlActions[MenuControls::MenuKey];
+    bool hasNativeMenuKey = nativeMenuKeyAction >= 0;
+    bool hasKeyboardMenuKey = controls.ControlKeys[MenuControls::MenuKey] >= 0;
+
+    bool comboPressed = false;
+    if (hasNativeMenuKey && hasKeyboardMenuKey) {
+        // require MenuKey_Action held down, then tap MenuKey
+        comboPressed = controls.IsNativeControlDownForType(MenuControls::MenuKey, 0) &&
+                       controls.IsKeyJustReleased(MenuControls::MenuKey);
+    }
+
+    if ((hasNativeMenuKey && hasKeyboardMenuKey && comboPressed) ||
+        (!hasNativeMenuKey && controls.IsKeyJustReleased(MenuControls::MenuKey)) ||
+        (useNative && NMPAD::IS_DISABLED_CONTROL_PRESSED(0, controls.ControllerButton1) &&
+         NMPAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, controls.ControllerButton2))) {
         if (!visible) {
             OpenMenu();
         }
@@ -1251,7 +1266,7 @@ void Menu::processMenuNav() {
         delay = GetTickCount64();
         return;
     }
-    if (controls.IsKeyJustReleased(MenuControls::MenuCancel) || 
+    if (controls.IsKeyJustReleased(MenuControls::MenuCancel) || controls.IsNativeJustReleasedForType(MenuControls::MenuCancel) ||
         useNative && PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, ControlFrontendCancel)) {
         if (menulevel > 0) {
             if (menulevel == 1) {
@@ -1276,7 +1291,7 @@ void Menu::processMenuNav() {
         }
         delay = GetTickCount64();
     }
-    if (controls.IsKeyJustReleased(MenuControls::MenuSelect) || 
+    if (controls.IsKeyJustReleased(MenuControls::MenuSelect) || controls.IsNativeJustReleasedForType(MenuControls::MenuSelect) ||
         useNative && PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, ControlFrontendAccept)) {
         if (menulevel > 0) {
             menuBeep();
@@ -1284,17 +1299,17 @@ void Menu::processMenuNav() {
         optionpress = true;
         delay = GetTickCount64();
     }
-    if (controls.IsKeyPressed(MenuControls::MenuDown) || 
+    if (controls.IsKeyPressed(MenuControls::MenuDown) || controls.IsNativeControlDownForType(MenuControls::MenuDown, 0) ||
         useNative && PAD::IS_DISABLED_CONTROL_PRESSED(0, ControlFrontendDown)) {
         nextOption();
         delay = GetTickCount64();
     }
-    if (controls.IsKeyPressed(MenuControls::MenuUp) || 
+    if (controls.IsKeyPressed(MenuControls::MenuUp) || controls.IsNativeControlDownForType(MenuControls::MenuUp, 0) ||
         useNative && PAD::IS_DISABLED_CONTROL_PRESSED(0, ControlFrontendUp)) {
         previousOption();
         delay = GetTickCount64();
     }
-    if (controls.IsKeyPressed(MenuControls::MenuLeft) || 
+    if (controls.IsKeyPressed(MenuControls::MenuLeft) || controls.IsNativeControlDownForType(MenuControls::MenuLeft, 0) ||
         useNative && PAD::IS_DISABLED_CONTROL_PRESSED(0, ControlPhoneLeft)) {
         if (menulevel > 0) {
             menuBeep();
@@ -1302,7 +1317,7 @@ void Menu::processMenuNav() {
         leftpress = true;
         delay = GetTickCount64();
     }
-    if (controls.IsKeyPressed(MenuControls::MenuRight) || 
+    if (controls.IsKeyPressed(MenuControls::MenuRight) || controls.IsNativeControlDownForType(MenuControls::MenuRight, 0) ||
         useNative && PAD::IS_DISABLED_CONTROL_PRESSED(0, ControlPhoneRight)) {
         if (menulevel > 0) {
             menuBeep();

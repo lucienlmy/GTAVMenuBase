@@ -15,6 +15,7 @@ namespace NativeMenu {
     std::fill(controlPrev, std::end(controlPrev), false);
     std::fill(controlCurr, std::end(controlCurr), false);
     std::fill(ControlKeys, std::end(ControlKeys), -1);
+    std::fill(NativeControlActions, std::end(NativeControlActions), -1);
 }
 
 bool MenuControls::IsKeyPressed(ControlType control) {
@@ -71,4 +72,30 @@ BOOL NMPAD::IS_DISABLED_CONTROL_JUST_PRESSED(int control, int action) {
     if (action < 0)
         return false;
     return PAD::IS_DISABLED_CONTROL_JUST_PRESSED(control, action);
+}
+
+void NativeMenu::MenuControls::AddNativeControl(eControl control) {
+    // initialize native control tracking maps for this control
+    nControlCurr[control] = false;
+    nControlPrev[control] = false;
+    nPressTime[control] = 0;
+    nReleaseTime[control] = 0;
+}
+
+bool NativeMenu::MenuControls::IsNativeJustPressedForType(ControlType control) {
+    int act = NativeControlActions[control];
+    if (act < 0) return false;
+    return NMPAD::IS_DISABLED_CONTROL_JUST_PRESSED(0, act);
+}
+
+bool NativeMenu::MenuControls::IsNativeJustReleasedForType(ControlType control) {
+    int act = NativeControlActions[control];
+    if (act < 0) return false;
+    return PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, act);
+}
+
+bool NativeMenu::MenuControls::IsNativeControlDownForType(ControlType control, unsigned long long millis) {
+    int act = NativeControlActions[control];
+    if (act < 0) return false;
+    return IsControlDownFor(static_cast<eControl>(act), millis);
 }

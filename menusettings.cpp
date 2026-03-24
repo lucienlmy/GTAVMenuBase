@@ -4,7 +4,11 @@
 
 #include "menucontrols.h"
 #include "menukeyboard.h"
+#include <unordered_map>
+#include <algorithm>
+#include <cctype>
 #include "menu.h"
+#include "input_name_map.h"
 #pragma warning(push)
 #pragma warning(disable: 4244)
 namespace NativeMenu {
@@ -40,6 +44,65 @@ namespace NativeMenu {
 
         control->ControllerButton1 = settingsMenu.GetLongValue("MENU", "ControllerButton1", -1);
         control->ControllerButton2 = settingsMenu.GetLongValue("MENU", "ControllerButton2", -1);
+
+        // 支持使用游戏动作（INPUT_*）作为第二套按键映射，示例： MenuUp_Action = INPUT_FRONTEND_UP
+        // 映射由 input_name_map.h 提供（自动从 enums.h 生成）
+
+        auto parseAction = [&](const char* raw)->int {
+            std::string v = raw ? raw : "";
+            // trim
+            v.erase(v.begin(), std::find_if(v.begin(), v.end(), [](unsigned char ch){ return !std::isspace(ch); }));
+            v.erase(std::find_if(v.rbegin(), v.rend(), [](unsigned char ch){ return !std::isspace(ch); }).base(), v.end());
+            if (v.empty()) return -1;
+            // 现在直接使用枚举名，例如 "INPUT_AIM"；不再接受带有 "#sym:" 前缀的写法
+            // lookup known names
+            auto it = inputNameMap.find(v);
+            if (it != inputNameMap.end()) return it->second;
+            // try numeric
+            try {
+                int n = std::stoi(v);
+                return n;
+            } catch (...) {
+                return -1;
+            }
+        };
+
+        // Read action mappings and register them (non-breaking: keyboard VK mappings remain primary)
+        int aMenuKey = parseAction(settingsMenu.GetValue("MENU", "MenuKey_Action", ""));
+        if (aMenuKey >= 0) {
+            control->NativeControlActions[MenuControls::ControlType::MenuKey] = aMenuKey;
+            control->AddNativeControl(static_cast<eControl>(aMenuKey));
+        }
+        int aUp = parseAction(settingsMenu.GetValue("MENU", "MenuUp_Action", ""));
+        if (aUp >= 0) {
+            control->NativeControlActions[MenuControls::ControlType::MenuUp] = aUp;
+            control->AddNativeControl(static_cast<eControl>(aUp));
+        }
+        int aDown = parseAction(settingsMenu.GetValue("MENU", "MenuDown_Action", ""));
+        if (aDown >= 0) {
+            control->NativeControlActions[MenuControls::ControlType::MenuDown] = aDown;
+            control->AddNativeControl(static_cast<eControl>(aDown));
+        }
+        int aLeft = parseAction(settingsMenu.GetValue("MENU", "MenuLeft_Action", ""));
+        if (aLeft >= 0) {
+            control->NativeControlActions[MenuControls::ControlType::MenuLeft] = aLeft;
+            control->AddNativeControl(static_cast<eControl>(aLeft));
+        }
+        int aRight = parseAction(settingsMenu.GetValue("MENU", "MenuRight_Action", ""));
+        if (aRight >= 0) {
+            control->NativeControlActions[MenuControls::ControlType::MenuRight] = aRight;
+            control->AddNativeControl(static_cast<eControl>(aRight));
+        }
+        int aSelect = parseAction(settingsMenu.GetValue("MENU", "MenuSelect_Action", ""));
+        if (aSelect >= 0) {
+            control->NativeControlActions[MenuControls::ControlType::MenuSelect] = aSelect;
+            control->AddNativeControl(static_cast<eControl>(aSelect));
+        }
+        int aCancel = parseAction(settingsMenu.GetValue("MENU", "MenuCancel_Action", ""));
+        if (aCancel >= 0) {
+            control->NativeControlActions[MenuControls::ControlType::MenuCancel] = aCancel;
+            control->AddNativeControl(static_cast<eControl>(aCancel));
+        }
 
         menuOpts->cheatString = settingsMenu.GetValue("MENU", "CheatString", "");
 
