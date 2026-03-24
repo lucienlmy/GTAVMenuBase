@@ -47,7 +47,13 @@ namespace NativeMenu {
         menuOpts->menuY = settingsMenu.GetDoubleValue("MENU", "MenuY", 0.0);
 
         menuOpts->useSmoothScroll = settingsMenu.GetBoolValue("Navigation", "Smooth Scrolling", false);
-        menuOpts->smoothFactor = settingsMenu.GetDoubleValue("Navigation", "Smooth Factor", 0.00001); 
+        // 兼容：保留旧的 Smooth Factor 配置
+        menuOpts->smoothFactor = settingsMenu.GetDoubleValue("Navigation", "Smooth Factor", 0.00001);
+        // 新增：选择平滑方式（"factor" 或 "time"），默认使用 factor
+        std::string smoothMode = settingsMenu.GetValue("Navigation", "Smooth Mode", "factor");
+        menuOpts->smoothUseTimeConstant = (smoothMode == "time");
+        // 平滑时间（毫秒），仅当 Smooth Mode = time 时生效，默认 80 ms
+        menuOpts->smoothTimeMs = static_cast<float>(settingsMenu.GetDoubleValue("Navigation", "Smooth TimeMs", 80.0));
 
         // Title Text
         menuOpts->titleTextColor.R =   settingsMenu.GetLongValue("Title Text",   "Red"    , 255);

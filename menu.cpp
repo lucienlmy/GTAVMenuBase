@@ -4,6 +4,7 @@
 
 #include <locale>
 #include <utility>
+#include <cmath>
 
 #include <inc/main.h>
 #include <inc/natives.h>
@@ -269,9 +270,23 @@ bool Menu::Option(const std::string& option, Color highlight, const std::vector<
         if (highlighted) {
             float highlightY = optiony;
             if (useSmoothScroll) {
-                highlightY = lerp(oldSmoothY,
-                    optiony,
-                    1.0f - pow(smoothFactor, MISC::GET_FRAME_TIME()));
+                if (resetSmooth) {
+                    highlightY = optiony;
+                    resetSmooth = false;
+                }
+                else {
+                    float dt = MISC::GET_FRAME_TIME();
+                    float alpha = 0.0f;
+                    if (smoothUseTimeConstant) {
+                        float tau = smoothTimeMs / 1000.0f;
+                        if (tau <= 0.0f) tau = 0.0001f;
+                        alpha = 1.0f - expf(-dt / tau);
+                    }
+                    else {
+                        alpha = 1.0f - pow(smoothFactor, dt);
+                    }
+                    highlightY = lerp(oldSmoothY, optiony, alpha);
+                }
                 oldSmoothY = highlightY;
             }
             highlightsSpriteDraws.push_back(

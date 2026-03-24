@@ -243,6 +243,8 @@ public:
 
     // For smooth scrolling
     float oldSmoothY = 0.0f;
+    // When true, the smooth interpolation will be reset on next update
+    bool resetSmooth = false;
 
     /*
      * These should be filled in by MenuSettings.ReadSettings().
@@ -264,6 +266,10 @@ public:
 
     bool useSmoothScroll = false;
     float smoothFactor = 0.00001f;
+    // 是否使用基于时间常数的平滑（指数平滑），若为 false 则使用原有的因子方式
+    bool smoothUseTimeConstant = false;
+    // 平滑时间（毫秒），仅在 smoothUseTimeConstant 为 true 时生效
+    float smoothTimeMs = 80.0f;
     uint16_t mRecordGlobal = 0;
 
     float MenuWidth() const { return menuWidth; }
