@@ -1261,6 +1261,12 @@ void Menu::processMenuNav() {
         }
         delay = GetTickCount64();
     }
+    
+    // Menu navigation commands are not processed when the menu is closed.
+    if (!visible) {
+        return;
+    }
+    
     if (controls.IsKeyJustReleased(MenuControls::MenuSelect) || 
         useNative && PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, ControlFrontendAccept)) {
         if (menulevel > 0) {
