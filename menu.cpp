@@ -1291,6 +1291,12 @@ void Menu::processMenuNav() {
         }
         delay = GetTickCount64();
     }
+    
+    // 菜单关闭时不处理菜单导航命令
+    if (!visible) {
+        return;
+    }
+    
     if (controls.IsKeyJustReleased(MenuControls::MenuSelect) || controls.IsNativeJustReleasedForType(MenuControls::MenuSelect) ||
         useNative && PAD::IS_DISABLED_CONTROL_JUST_RELEASED(0, ControlFrontendAccept)) {
         if (menulevel > 0) {
