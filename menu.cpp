@@ -293,26 +293,29 @@ bool Menu::MenuOption(const std::string& option, const std::string& menu, const 
     float indicatorHeight = totalHeight - optionHeight; // why the hell was this menu designed like *this*?
     bool highlighted = currentoption == optioncount;
 
+    const float spriteSz = 0.025f;
+    bool doDraw = false;
+    float textureY;
+
     if (currentoption <= maxDisplay && optioncount <= maxDisplay) {
-        textDraws.push_back(
-            [=]() { drawText(
-            "2", 3,
-            optionRightMargin / 2.0f,//menuX + menuWidth / 2.0f - optionRightMargin,
-            indicatorHeight + menuY,
-            optionTextSize * 0.75f, optionTextSize * 0.75f,
-            highlighted ? optionsTextSelectColor : optionsTextColor, 2
-            ); });
+        doDraw = true;
+        textureY = (indicatorHeight + (menuY + 0.0175f));
     }
     else if ((optioncount > (currentoption - maxDisplay)) && optioncount <= currentoption) {
-        int optioncount_ = optioncount;
-        textDraws.push_back(
-            [=]() { drawText(
-            "2", 3,
-            optionRightMargin / 2.0f, //menuX + menuWidth / 2.0f - optionRightMargin,
-            menuY + headerHeight + (optioncount_ - (currentoption - maxDisplay + 1)) * optionHeight,
-            optionTextSize * 0.75f, optionTextSize * 0.75f,
-            highlighted ? optionsTextSelectColor : optionsTextColor, 2
-        ); });
+        doDraw = true;
+        textureY = menuY + headerHeight + (optioncount - (currentoption - maxDisplay + 1)) * optionHeight + 0.0175f;
+    }
+
+    if (doDraw) {
+        int resX, resY;
+        GRAPHICS::GET_ACTUAL_SCREEN_RESOLUTION(&resX, &resY);
+        float ratio = static_cast<float>(resX) / static_cast<float>(resY);
+        foregroundSpriteCalls.push_back(
+            [=]() { drawSprite("commonmenu", "arrowright",
+                               menuX + menuWidth / 2.0f - optionRightMargin + 0.005f,
+                               textureY,
+                               spriteSz / ratio, spriteSz, 0.0f, highlighted ? optionsTextSelectColor : optionsTextColor); }
+        );
     }
 
     if (optionpress && currentoption == optioncount) {
